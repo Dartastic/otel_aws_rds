@@ -1,15 +1,16 @@
-// Licensed under the Dartastic Pro Software License Agreement.
+// Licensed under the Apache License, Version 2.0
 // Copyright 2025-2026 Mindful Software LLC d/b/a Dartastic.io, All rights reserved.
 
-import 'package:dartastic_opentelemetry/dartastic_opentelemetry.dart';
+import 'package:dartastic_opentelemetry_api/dartastic_opentelemetry_api.dart';
 
 import 'otel_aws_rds_suppression.dart';
 
 const _tracerName = 'dartastic_otel_libs_aws_rds';
 
-Tracer _tracer() => OTel.tracerProvider().getTracer(_tracerName);
+APITracer _tracer() => OTelAPI.tracerProvider().getTracer(_tracerName);
 
 class AwsRdsResult {
+  /// Creates a result.
   const AwsRdsResult({
     this.region,
     this.surface,
@@ -96,8 +97,13 @@ class AwsRdsResult {
   final int? statusCode;
 }
 
+/// What a traced call returned: the value for the caller plus fields
+/// recorded on the span.
 class AwsRdsCallResult<T> {
+  /// Creates a call result.
   const AwsRdsCallResult({required this.value, this.result});
+
+  /// The value returned to the caller.
   final T value;
   final AwsRdsResult? result;
 }
@@ -133,7 +139,7 @@ Future<T> tracedAwsRds<T>({
   final span = _tracer().startSpan(
     'aws_rds $operation',
     kind: SpanKind.client,
-    attributes: OTel.attributesFromMap(m),
+    attributes: OTelAPI.attributesFromMap(m),
   );
   try {
     final r = await invoke();
@@ -141,109 +147,109 @@ Future<T> tracedAwsRds<T>({
       final res = r.result!;
       final extras = <Attribute<Object>>[];
       if (res.region != null) {
-        extras.add(OTel.attributeString('aws_rds.region', res.region!));
+        extras.add(OTelAPI.attributeString('aws_rds.region', res.region!));
       }
       if (res.surface != null) {
-        extras.add(OTel.attributeString('aws_rds.surface', res.surface!));
+        extras.add(OTelAPI.attributeString('aws_rds.surface', res.surface!));
       }
       if (res.dbInstanceId != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'aws_rds.db_instance.id',
           res.dbInstanceId!,
         ));
       }
       if (res.dbClusterId != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'aws_rds.db_cluster.id',
           res.dbClusterId!,
         ));
       }
       if (res.engine != null) {
-        extras.add(OTel.attributeString('aws_rds.engine', res.engine!));
+        extras.add(OTelAPI.attributeString('aws_rds.engine', res.engine!));
       }
       if (res.engineVersion != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'aws_rds.engine.version',
           res.engineVersion!,
         ));
       }
       if (res.instanceClass != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'aws_rds.instance_class',
           res.instanceClass!,
         ));
       }
       if (res.allocatedStorageGb != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'aws_rds.allocated_storage_gb',
           res.allocatedStorageGb!,
         ));
       }
       if (res.iopsProvisioned != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'aws_rds.iops_provisioned',
           res.iopsProvisioned!,
         ));
       }
       if (res.storageType != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'aws_rds.storage_type',
           res.storageType!,
         ));
       }
       if (res.multiAz != null) {
-        extras.add(OTel.attributeBool('aws_rds.multi_az', res.multiAz!));
+        extras.add(OTelAPI.attributeBool('aws_rds.multi_az', res.multiAz!));
       }
       if (res.availabilityZone != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'aws_rds.availability_zone',
           res.availabilityZone!,
         ));
       }
       if (res.serverlessV2MinCapacity != null) {
-        extras.add(OTel.attributeDouble(
+        extras.add(OTelAPI.attributeDouble(
           'aws_rds.serverless_v2.min_acu',
           res.serverlessV2MinCapacity!,
         ));
       }
       if (res.serverlessV2MaxCapacity != null) {
-        extras.add(OTel.attributeDouble(
+        extras.add(OTelAPI.attributeDouble(
           'aws_rds.serverless_v2.max_acu',
           res.serverlessV2MaxCapacity!,
         ));
       }
       if (res.publiclyAccessible != null) {
-        extras.add(OTel.attributeBool(
+        extras.add(OTelAPI.attributeBool(
           'aws_rds.publicly_accessible',
           res.publiclyAccessible!,
         ));
       }
       if (res.iamAuthEnabled != null) {
-        extras.add(OTel.attributeBool(
+        extras.add(OTelAPI.attributeBool(
           'aws_rds.iam_auth.enabled',
           res.iamAuthEnabled!,
         ));
       }
       if (res.encryptionAtRest != null) {
-        extras.add(OTel.attributeBool(
+        extras.add(OTelAPI.attributeBool(
           'aws_rds.encryption_at_rest',
           res.encryptionAtRest!,
         ));
       }
       if (res.kmsKeyId != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'aws_rds.kms.key_id',
           res.kmsKeyId!,
         ));
       }
       if (res.endpoint != null) {
-        extras.add(OTel.attributeString('aws_rds.endpoint', res.endpoint!));
+        extras.add(OTelAPI.attributeString('aws_rds.endpoint', res.endpoint!));
       }
       if (res.port != null) {
-        extras.add(OTel.attributeInt('aws_rds.port', res.port!));
+        extras.add(OTelAPI.attributeInt('aws_rds.port', res.port!));
       }
       if (res.instanceStatus != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'aws_rds.instance.status',
           res.instanceStatus!,
         ));
@@ -260,32 +266,32 @@ Future<T> tracedAwsRds<T>({
         }
       }
       if (res.clusterStatus != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'aws_rds.cluster.status',
           res.clusterStatus!,
         ));
       }
       if (res.backupRetentionDays != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'aws_rds.backup_retention_days',
           res.backupRetentionDays!,
         ));
       }
       if (res.errorCode != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'aws_rds.error.code',
           res.errorCode!,
         ));
         span.setStatus(SpanStatusCode.Error, 'RDS ${res.errorCode}');
       }
       if (res.errorMessage != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'aws_rds.error.message',
           res.errorMessage!,
         ));
       }
       if (res.statusCode != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'http.response.status_code',
           res.statusCode!,
         ));
@@ -293,13 +299,13 @@ Future<T> tracedAwsRds<T>({
           span.setStatus(SpanStatusCode.Error, 'RDS HTTP ${res.statusCode}');
         }
       }
-      if (extras.isNotEmpty) span.addAttributes(OTel.attributes(extras));
+      if (extras.isNotEmpty) span.addAttributes(OTelAPI.attributes(extras));
     }
     return r.value;
   } catch (e, st) {
-    span.addAttributes(OTel.attributes([
-      OTel.attributeString(
-        ErrorResource.errorType.key,
+    span.addAttributes(OTelAPI.attributes([
+      OTelAPI.attributeString(
+        ErrorAttributes.errorType.key,
         e.runtimeType.toString(),
       ),
     ]));
